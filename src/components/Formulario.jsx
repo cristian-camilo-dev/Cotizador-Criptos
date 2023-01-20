@@ -62,8 +62,57 @@ const InputSubmit = styled.input`
   }
 `;
 
+const Error = styled.p`
+  color: #fdb813;
+  font-weight: bold;
+  font-size: 2em;
+  padding: 10px;
+  border: 2px solid #fdb813;
+  border-radius: 5px;
+  animation: shake 0.5s ease;
+  box-shadow: 0px 0px 5px #fdb813;
+  text-align: center;
+
+  @keyframes shake {
+    0% {
+      transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+      transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    20% {
+      transform: translate(-3px, 0px) rotate(1deg);
+    }
+    30% {
+      transform: translate(3px, 2px) rotate(0deg);
+    }
+    40% {
+      transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+      transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+      transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+      transform: translate(3px, 1px) rotate(-1deg);
+    }
+    80% {
+      transform: translate(-1px, -1px) rotate(1deg);
+    }
+    90% {
+      transform: translate(1px, 2px) rotate(0deg);
+    }
+    100% {
+      transform: translate(1px, -2px) rotate(-1deg);
+    }
+  }
+`;
+
 export const Formulario = () => {
   const [criptos, setCriptos] = useState([]);
+  const [error, setError] = useState(false);
 
   const [moneda, SelectMonedas] = useSelectMonedas("Elige tu moneda", monedas);
   const [criptomoneda, SelectCripto] = useSelectMonedas(
@@ -71,15 +120,11 @@ export const Formulario = () => {
     criptos
   );
 
-  
-
   useEffect(() => {
     const consultarAPI = async () => {
       const url = `https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD`;
       const resultado = await fetch(url);
       const monedas = await resultado.json();
-
-    
 
       const arrayCriptos = monedas.Data.map((cripto) => {
         const objeto = {
@@ -93,13 +138,27 @@ export const Formulario = () => {
     consultarAPI();
   }, []);
 
-  console.log(criptos);
+  // validar formulario
+
+  const cotizarMoneda = (e) => {
+    e.preventDefault();
+    if ([moneda, criptomoneda].includes("")) {
+      setError(true);
+     
+    }
+    setTimeout(() => {
+      setError(false);
+    }, 3000);
+  };
 
   return (
-    <form>
-      <SelectMonedas />
-      <SelectCripto />
-      <InputSubmit type="submit" value="Cotizar 📈" />
-    </form>
+    <>
+      {error ? <Error>Todos los campos son obligatorios</Error> : null}
+      <form onSubmit={cotizarMoneda}>
+        <SelectMonedas />
+        <SelectCripto />
+        <InputSubmit type="submit" value="Cotizar 📈" />
+      </form>
+    </>
   );
 };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import ImgCripto from "../src/assets/imagen-criptos.png";
+import { Formulario } from "./components/Formulario";
 
 const Heading = styled.h1`
   font-family: "Lato", sans-serif;
@@ -18,7 +19,6 @@ const Heading = styled.h1`
     background-color: #66a2fe;
     display: block;
     margin: 10px auto 0 auto;
-    
   }
 `;
 
@@ -30,7 +30,7 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 2rem;
-}
+  }
 `;
 
 const Image = styled.img`
@@ -38,19 +38,23 @@ const Image = styled.img`
   width: 80%;
   margin: 100px auto 0 auto;
   display: block;
-  background: rgba( 1, 29, 41, 0.75 );
-box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-backdrop-filter: blur( 4.5px );
--webkit-backdrop-filter: blur( 4.5px );
-border-radius: 10px;
-border: 1px solid rgba( 255, 255, 255, 0.18 );
+  background: rgba(1, 29, 41, 0.75);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 `;
 
 function App() {
   return (
     <Container>
       <Image src={ImgCripto} alt="Imagen criptomonedas" />
-      <Heading>Desde app</Heading>;
+
+      <div>
+        <Heading>Cotiza Criptomonedas al Instante</Heading>;
+        <Formulario />
+      </div>
     </Container>
   );
 }

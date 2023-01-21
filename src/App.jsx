@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import ImgCripto from "../src/assets/imagen-criptos.png";
 import { Formulario } from "./components/Formulario";
+import { Resultado } from "./components/Resultado";
 
 const Heading = styled.h1`
   font-family: "Lato", sans-serif;
@@ -30,7 +31,7 @@ const Container = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 2rem;
-    align-items: end;
+    align-items: center;
   }
 `;
 
@@ -49,30 +50,36 @@ const Image = styled.img`
 
 function App() {
   const [monedas, setMoneda] = useState({});
-  const [resultado , setResultado] = useState({});
-  
+  const [resultado, setResultado] = useState({});
 
   useEffect(() => {
     if (Object.keys(monedas).length > 0) {
       const cotizadorCripto = async () => {
-      const { moneda, criptomoneda } = monedas;
-      const url =` https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`; 
-      const respuesta = await fetch(url);
-      const resultado = await respuesta.json();
-      setResultado(resultado.DISPLAY[criptomoneda][moneda]);
+        const { moneda, criptomoneda } = monedas;
+        const url = ` https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`;
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+
+        if (resultado.Response !== "Error") {
+          setResultado(resultado.DISPLAY[criptomoneda][moneda]);
+        }
+      };
+      cotizadorCripto();
     }
-    cotizadorCripto();
-  }
-    
   }, [monedas]);
 
   return (
     <Container>
-      <Image src={ImgCripto} alt="Imagen criptomonedas" />
+       {
+    !resultado.PRICE ? 
+    <Image src={ImgCripto} alt="Imagen criptomonedas" />
+    : <Resultado resultado={resultado} />
+  }
 
       <div>
         <Heading>Cotiza Criptomonedas al Instante</Heading>;
         <Formulario setMoneda={setMoneda} />
+        
       </div>
     </Container>
   );

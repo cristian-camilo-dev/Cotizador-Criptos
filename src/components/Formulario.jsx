@@ -110,7 +110,7 @@ const Error = styled.p`
   }
 `;
 
-export const Formulario = () => {
+export const Formulario = ({ setMoneda }) => {
   const [criptos, setCriptos] = useState([]);
   const [error, setError] = useState(false);
 
@@ -149,6 +149,10 @@ export const Formulario = () => {
     setTimeout(() => {
       setError(false);
     }, 3000);
+    setMoneda({
+      moneda,
+      criptomoneda,
+    });
   };
 
   return (
